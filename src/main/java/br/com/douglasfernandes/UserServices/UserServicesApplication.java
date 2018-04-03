@@ -20,11 +20,15 @@ public class UserServicesApplication {
 	@Bean
 	@Primary
 	public DataSource dataSource() {
+		String database = System.getenv("HMTF_DB_NAME");
+		String username = System.getenv("HMTF_DB_USER");
+		String password = System.getenv("HMTF_DB_PWD");
+
 		return DataSourceBuilder
 				.create()
-				.username("root")
-				.password("root")
-				.url("jdbc:mysql://localhost:3306/banco_teste")
+				.username(username)
+				.password(password)
+				.url("jdbc:mysql://localhost:3306/" + database  + "?useSSL=false")
 				.driverClassName("com.mysql.jdbc.Driver")
 				.build();
 	}
