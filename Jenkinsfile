@@ -9,7 +9,7 @@ node {
     def repoUrl = 'git@github.com:compliancesoftware/HelpMeToFood-user-services.git'
     def branch = '*/' + "${env.BRANCH_NAME_USER_SERVICE}"
 
-    def credentials = 'd0d1c605-a0e9-4b83-be59-a5a1c45da8belocal'
+    def credentials = 'd0d1c605-a0e9-4b83-be59-a5a1c45da8be'
 
     try {
         //sendMail('Delivery iniciado ${projName}.', 'Delivery ${projName} TAG:${versionIncremented}, iniciado.')
