@@ -17,6 +17,8 @@ node {
         stage(name: "Clone", concurrency: 1)
         echo 'Clonando repositorio...'
         checkout([$class: 'GitSCM', branches: [[name: branch]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: credentials, url: repoUrl]]])
+        sh "chmod -R 777 *"
+        sh "chmod -R 777 *"
         echo 'Repositorio clonado.'
         sh "ls"
 
