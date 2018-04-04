@@ -7,7 +7,7 @@ node {
 
     def gradle = "./gradlew"
     def repoUrl = 'git@github.com:compliancesoftware/HelpMeToFood-user-services.git'
-    def branch = '*/' + "${env.BRANCH_NAME_USER_SERVICE}"
+    def branch = '*/master'
 
     def credentials = 'd0d1c605-a0e9-4b83-be59-a5a1c45da8be'
 
@@ -19,18 +19,6 @@ node {
         checkout([$class: 'GitSCM', branches: [[name: branch]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: credentials, url: repoUrl]]])
         echo 'Repositorio clonado.'
         sh "ls"
-
-        def gradleProperties = readFile(pwd() + "/gradle.properties")
-        def splittedVersion = gradleProperties.split("=")
-        def version = splittedVersion[1].trim()
-
-        echo 'Versão encontrada: ' + version
-
-        def versionDescription = version.tokenize(".")
-
-        echo 'Major: ' + versionDescription[0]
-        echo 'Minor: ' + versionDescription[1]
-        echo 'Patch: ' + versionDescription[2]
 
         stage(name: "Clean", concurrency: 1)
         echo 'Limpando o ambiente...'
