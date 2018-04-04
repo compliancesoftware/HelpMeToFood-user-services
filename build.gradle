@@ -51,7 +51,7 @@ repositories {
 }
 
 release {
-	failOnCommitNeeded = true
+	failOnCommitNeeded = false
 	failOnPublishNeeded = true
 	failOnSnapshotDependencies = true
 	failOnUnversionedFiles = false
