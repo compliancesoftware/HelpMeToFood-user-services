@@ -17,8 +17,6 @@ node {
         stage(name: "Clone", concurrency: 1)
         echo 'Clonando repositorio...'
         checkout([$class: 'GitSCM', branches: [[name: branch]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: credentials, url: repoUrl]]])
-        sh "chmod -R 777 *"
-        sh "chmod -R 777 *"
         echo 'Repositorio clonado.'
         sh "ls"
 
@@ -44,30 +42,6 @@ node {
         //sh "${gradle} build -x test --stacktrace"
         sh "${gradle} assemble --stacktrace"
         echo 'Build concluido com exito.'
-
-        stage(name: "Release", concurrency: 1)
-        echo 'Definindo variáveis para release...'
-
-        def versionToIncrement = '' + "${env.VERSION_USER_SERVICE}"
-        echo 'Incrementando ' + versionToIncrement
-
-        def versionIncremented = version
-
-        if(versionToIncrement == "patch") {
-            versionIncremented = versionDescription[0] + '.' + versionDescription[1] + '.' + (versionDescription[2].toInteger() + 1)
-        }
-        if(versionToIncrement == "minor") {
-            versionIncremented = versionDescription[0] + '.' + (versionDescription[1].toInteger() + 1) + '.' + versionDescription[2]
-        }
-        if(versionToIncrement == "major") {
-            versionIncremented = (versionDescription[0].toInteger() + 1) + '.' + versionDescription[1] + '.' + versionDescription[2]
-        }
-
-        echo 'Realizando release para a versão: ' + versionIncremented
-
-        sh "${gradle} release -DPrelease.useAutomaticVersion=true -DPrelease.releaseVersion=${version} -DPrelease.newVersion=${versionIncremented} --stacktrace"
-
-        echo 'Release bem sucedida.'
 
         //stage(name: "Test", concurrency: 1)
         //try {
