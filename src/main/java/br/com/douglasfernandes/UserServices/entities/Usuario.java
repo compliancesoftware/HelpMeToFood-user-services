@@ -1,50 +1,50 @@
 package br.com.douglasfernandes.UserServices.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Calendar;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @javax.persistence.Entity
-@Table(name="usuario")
+@Table(name="users")
 public class Usuario implements Entity {
 
     @Id
-    @Column(name="cpf")
-    private long cpf;
+    @GeneratedValue
+    @Column(name="id")
+    private Long id;
 
     @Column(name="nome")
     private String nome;
 
-    @Column(name="rg")
-    private long rg;
-
     @Column(name="email")
     private String email;
+
+    @Column(name="senha")
+    private String senha;
 
     @Column(name="telefone")
     private String telefone;
 
-    @Column(name="endereco")
-    private String endereco;
+    @Column(name = "ultimo_acesso")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Calendar ultimoAcesso;
 
-    @Column(name="numero")
-    private String numero;
+    @Column(name="token")
+    private String token;
 
-    @Column(name="bairro")
-    private String bairro;
+    @Column(name = "data_expiracao_token")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Calendar dataExpiracaoToken;
 
-    @Column(name="cidade")
-    private String cidade;
-
-    @Column(name="estado")
-    private String estado;
-
-    @Column(name="cep")
-    private long cep;
+    @Column(name="ativo")
+    private boolean ativo;
 
 }

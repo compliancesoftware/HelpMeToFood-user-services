@@ -1,15 +1,15 @@
 package br.com.douglasfernandes.UserServices.services.impl;
 
-import br.com.douglasfernandes.UserServices.dao.UsuarioDao;
-import br.com.douglasfernandes.UserServices.entities.Usuario;
-import br.com.douglasfernandes.UserServices.services.UserService;
+import java.util.List;
+
+import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
+import br.com.douglasfernandes.UserServices.dao.UsuarioDao;
+import br.com.douglasfernandes.UserServices.entities.Usuario;
+import br.com.douglasfernandes.UserServices.services.UserService;
 
 @Service
 @Transactional
@@ -19,45 +19,48 @@ public class UserServiceImpl implements UserService {
     private UsuarioDao usuarioDao;
 
     @Override
-    public Usuario salvarUsuario(Usuario usuario) throws RuntimeException {
-        Usuario salvo = null;
-
+    public Usuario salvarUsuario(Usuario usuario) throws ServiceException {
         try {
-            salvo = usuarioDao.saveAndFlush(usuario);
-            if(salvo == null) {
-                throw new RuntimeException("Erro ao tentar salvar usuario.");
+            Usuario salvo = usuarioDao.saveAndFlush(usuario);
+
+            if (salvo == null) {
+                throw new ServiceException("Erro ao tentar salvar usuário.");
             }
-        } catch(Exception ex) {
-            throw new RuntimeException(ex.getMessage());
-        }
 
-        return salvo;
+            return salvo;
+        } catch (Exception ex) {
+            throw new ServiceException(ex.getMessage());
+        }
     }
 
     @Override
-    public List<Usuario> listarUsuarios() throws RuntimeException {
-        List<Usuario> lista =  null;
-
+    public List<Usuario> listarUsuarios() throws ServiceException {
         try {
-            lista = usuarioDao.findAll();
-        } catch(Exception ex) {
-            throw new RuntimeException(ex.getMessage());
-        }
+            List<Usuario> lista = usuarioDao.findAll();
 
-        return lista;
+            if (lista == null) {
+                throw new ServiceException("Nenhum usuário encontrado.");
+            }
+
+            return lista;
+        } catch (Exception ex) {
+            throw new ServiceException(ex.getMessage());
+        }
     }
 
     @Override
-    public Usuario obterUsuarioporCpf(long cpf) throws RuntimeException {
-        Usuario encontrado = null;
-
+    public Usuario findByNome(String nome) throws ServiceException {
         try {
-            encontrado = usuarioDao.findOne(new Long(cpf));
-        } catch(Exception ex) {
-            throw new RuntimeException(ex.getMessage());
-        }
+            Usuario found = usuarioDao.findByNome(nome);
 
-        return encontrado;
+            if (found == null) {
+                throw new ServiceException("Usuário não encontrado.");
+            }
+
+            return found;
+        } catch (Exception ex) {
+            throw new ServiceException(ex.getMessage());
+        }
     }
 
 }
