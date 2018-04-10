@@ -55,8 +55,8 @@ public class UserRestApi {
         }
     }
 
-    @GetMapping(ApiV1Endpoints.API_V1_USUARIOS_BUSCA_POR_NOME_ENDPOINT)
-    public Usuario obterUsuarioPorNome(@PathVariable("nome") String nome, HttpServletResponse response)
+    @PostMapping(ApiV1Endpoints.API_V1_USUARIOS_BUSCA_POR_NOME_ENDPOINT)
+    public Usuario obterUsuarioPorNome(@RequestBody String nome, HttpServletResponse response)
             throws IOException {
         try {
             Usuario usuario = userService.findByNome(nome);
