@@ -1,9 +1,7 @@
 package br.com.douglasfernandes.UserServices.services.impl;
 
-import java.util.Calendar;
 import java.util.List;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,12 +21,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public Usuario salvarUsuario(Usuario usuario) throws ServiceException {
         try {
-            usuario.setSenha(DigestUtils.sha1Hex(usuario.getSenha()));
-            usuario.setAtivo(true);
-            Calendar now = Calendar.getInstance();
-            usuario.setUltimoAcesso(now);
-            usuario.setDataExpiracaoToken(now);
-
             Usuario salvo = usuarioDao.saveAndFlush(usuario);
 
             if (salvo == null) {

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import br.com.douglasfernandes.UserServices.Messaging.MessageSender;
+import br.com.douglasfernandes.UserServices.VO.UsuarioVO;
 import br.com.douglasfernandes.UserServices.entities.Usuario;
 import br.com.douglasfernandes.UserServices.rest.api.endpoints.ApiV1Endpoints;
 import br.com.douglasfernandes.UserServices.services.UserService;
@@ -86,13 +88,15 @@ public class UserRestApi {
     @ApiOperation(value = ApiV1Endpoints.API_V1_USUARIOS_SALVAR_ENDPOINT, //
             notes = "Criar novo usuário")
     @RequestMapping(value = ApiV1Endpoints.API_V1_USUARIOS_SALVAR_ENDPOINT, method = RequestMethod.POST)
-    public Usuario salvarUsuario(@RequestBody Usuario usuario, HttpServletResponse response) throws IOException {
+    public Usuario salvarUsuario(@RequestBody @Valid UsuarioVO usuario, HttpServletResponse response)
+            throws IOException {
         try {
-            Usuario salvo = userService.salvarUsuario(usuario);
+            Usuario novoUsuario = usuario.toUsuario();
+            novoUsuario = userService.salvarUsuario(novoUsuario);
 
-            sendMessageToQueue(salvo);
+            sendMessageToQueue(novoUsuario);
 
-            return salvo;
+            return novoUsuario;
         } catch (ServiceException ex) {
             log.error("M=salvarUsuario, E=Erro ao tentar salvar usuario. Verifique o stacktrace seguinte:");
             ex.printStackTrace();
