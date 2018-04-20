@@ -2,8 +2,11 @@ import java.util.regex.Matcher
 
 buildscript {
     ext {
+        //Spring
         springVersion = '4.1.6.RELEASE'
         springBootVersion = "1.5.9.RELEASE"
+        springfoxVersion = '2.7.0'
+
         mySqlConnectorVersion = "5.1.45"
         lombokVersion = "1.16.8"
         jacksonDatatypeVersion = "2.4.0"
@@ -17,6 +20,12 @@ buildscript {
 
         //Gradle Release Plugin
         gradleReleasePlugin = '2.6.0'
+
+        //Logging
+        slf4jVersion = '1.7.25'
+
+        //Apache commons
+        apacheCommonsVersion = '1.11'
     }
     repositories {
         mavenCentral()
@@ -99,6 +108,14 @@ dependencies {
     compile("mysql:mysql-connector-java:${mySqlConnectorVersion}")
     compile("org.projectlombok:lombok:${lombokVersion}")
     compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonDatatypeVersion}")
+
+    compile("org.slf4j:slf4j-api:${slf4jVersion}")
+
+    compile("commons-codec:commons-codec:${apacheCommonsVersion}")
+
+    //Swagger
+    compile("io.springfox:springfox-swagger-ui:${springfoxVersion}")
+    compile("io.springfox:springfox-swagger2:${springfoxVersion}")
 
     testCompile("junit:junit:${junitVersion}")
     testCompile("org.springframework.boot:spring-boot-starter-test")

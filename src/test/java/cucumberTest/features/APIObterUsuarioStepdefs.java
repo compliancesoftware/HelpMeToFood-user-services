@@ -4,10 +4,6 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.web.client.HttpClientErrorException;
@@ -33,19 +29,13 @@ public class APIObterUsuarioStepdefs {
 
     private int httpStatusCode;
 
-    private void doPostForUserByName(final Object request) {
+    private void doGetForUserByName(final String name) {
         RestTemplate restTemplate = new RestTemplate();
 
-        String url = "http://localhost:8080/" + ApiV1Endpoints.API_V1_USUARIOS_ROOT_ENDPOINT + "/"
-                + ApiV1Endpoints.API_V1_USUARIOS_BUSCA_POR_NOME_ENDPOINT;
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<?> requestEntity = new HttpEntity<>(request, headers);
+        String url = "http://localhost:8080" + ApiV1Endpoints.API_V1_USUARIOS_ROOT_ENDPOINT + "/" + name;
 
         try {
-            response = restTemplate.exchange(url, HttpMethod.POST, requestEntity,
-                    Usuario.class);
+            response = restTemplate.getForEntity(url, Usuario.class);
 
             httpStatusCode = response.getStatusCode().value();
         } catch (HttpClientErrorException hcee) {
@@ -56,7 +46,7 @@ public class APIObterUsuarioStepdefs {
     private void doGetUsers() {
         RestTemplate restTemplate = new RestTemplate();
 
-        String url = "http://localhost:8080/" + ApiV1Endpoints.API_V1_USUARIOS_ROOT_ENDPOINT;
+        String url = "http://localhost:8080" + ApiV1Endpoints.API_V1_USUARIOS_ROOT_ENDPOINT + "/";
 
         try {
             response = restTemplate.getForEntity(url, List.class);
@@ -69,7 +59,7 @@ public class APIObterUsuarioStepdefs {
 
     @Dado("^usuario com nome \"(.*?)\"$")
     public void usuarioComNome(final String nome) {
-        doPostForUserByName(nome);
+        doGetForUserByName(nome);
         Assert.assertNotNull(response.getBody());
     }
 

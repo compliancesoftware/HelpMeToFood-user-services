@@ -9,7 +9,11 @@ import javax.servlet.http.HttpServletResponse;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -17,11 +21,15 @@ import br.com.douglasfernandes.UserServices.Messaging.MessageSender;
 import br.com.douglasfernandes.UserServices.entities.Usuario;
 import br.com.douglasfernandes.UserServices.rest.api.endpoints.ApiV1Endpoints;
 import br.com.douglasfernandes.UserServices.services.UserService;
-import lombok.extern.log4j.Log4j;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 
+@Api(value = ApiV1Endpoints.API_V1_USUARIOS_ROOT_ENDPOINT, //
+        description = "API para consulta e manutenção de usuarios do sistema.")
 @RestController
 @RequestMapping(ApiV1Endpoints.API_V1_USUARIOS_ROOT_ENDPOINT)
-@Log4j
+@Slf4j
 public class UserRestApi {
 
     @Autowired
@@ -40,7 +48,9 @@ public class UserRestApi {
         }
     }
 
-    @GetMapping
+    @ApiOperation(value = "/", //
+            notes = "Obter todos os usuários do sistema")
+    @RequestMapping(value = "/", method = RequestMethod.GET)
     public List<Usuario> usuarios(HttpServletResponse response) throws IOException {
         try {
             List<Usuario> usuarios = userService.listarUsuarios();
@@ -55,8 +65,10 @@ public class UserRestApi {
         }
     }
 
-    @PostMapping(ApiV1Endpoints.API_V1_USUARIOS_BUSCA_POR_NOME_ENDPOINT)
-    public Usuario obterUsuarioPorNome(@RequestBody String nome, HttpServletResponse response)
+    @ApiOperation(value = ApiV1Endpoints.API_V1_USUARIOS_BUSCA_POR_NOME_ENDPOINT, //
+            notes = "Obter dados de usuário por nome")
+    @RequestMapping(value = ApiV1Endpoints.API_V1_USUARIOS_BUSCA_POR_NOME_ENDPOINT, method = RequestMethod.GET)
+    public Usuario obterUsuarioPorNome(@PathVariable("nome") String nome, HttpServletResponse response)
             throws IOException {
         try {
             Usuario usuario = userService.findByNome(nome);
@@ -71,7 +83,9 @@ public class UserRestApi {
         }
     }
 
-    @PostMapping(ApiV1Endpoints.API_V1_USUARIOS_SALVAR_ENDPOINT)
+    @ApiOperation(value = ApiV1Endpoints.API_V1_USUARIOS_SALVAR_ENDPOINT, //
+            notes = "Criar novo usuário")
+    @RequestMapping(value = ApiV1Endpoints.API_V1_USUARIOS_SALVAR_ENDPOINT, method = RequestMethod.POST)
     public Usuario salvarUsuario(@RequestBody Usuario usuario, HttpServletResponse response) throws IOException {
         try {
             Usuario salvo = userService.salvarUsuario(usuario);
