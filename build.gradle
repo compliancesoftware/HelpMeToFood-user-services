@@ -4,7 +4,7 @@ buildscript {
     ext {
         //Spring
         springVersion = '4.1.6.RELEASE'
-        springBootVersion = "1.5.9.RELEASE"
+        springBootVersion = "2.0.1.RELEASE"
         springfoxVersion = '2.7.0'
 
         mySqlConnectorVersion = "5.1.45"
@@ -94,6 +94,20 @@ release {
 
 bootRun() {
     dependsOn 'test'
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+bootJar {
+    baseName = project.name
+    version = version
 }
 
 dependencies {
