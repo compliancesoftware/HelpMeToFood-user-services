@@ -50,7 +50,7 @@ public class UserRestApi {
         }
     }
 
-    @ApiOperation(value = "/", //
+    @ApiOperation(value = "", //
             notes = "Obter todos os usuários do sistema")
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public List<Usuario> usuarios(HttpServletResponse response) throws IOException {
